@@ -1,0 +1,256 @@
+/* =========================================================
+   Quoridor — Dark Theme (playful, responsive, sidebar UI)
+   Scope: uses your existing class names from App.jsx/HUD/GridBoard
+   ========================================================= */
+
+/* ---------- Theme tokens ---------- */
+:root{
+  --bg: #131b28;
+  --bg-accent: radial-gradient(1200px 600px at -10% -10%, rgba(55,105,255,.09) 0%, transparent 60%),
+               radial-gradient(1000px 500px at 110% 10%, rgba(255,95,90,.09) 0%, transparent 60%);
+  --panel: #141922;
+  --panel-2: #171d28;
+  --ink: #dbe2ea;
+  --muted: #9aa6b2;
+  --stroke: #243042;
+  --ring: 0 0 0 3px rgba(120,150,255,.25);
+  --shadow: 0 10px 28px rgba(0,0,0,.45);
+  --radius: 14px;
+
+  /* brand accents */
+  --accent: #487fff;     /* primary buttons */
+  --accent-2: #ff6f66;   /* secondary badges */
+
+  /* gameplay colors */
+  --p0:   #6aa5ff;       /* Blue pawn/dots */
+  --p1:   #ff6b61;       /* Red pawn/dots */
+  --wall0:#3b5ddd;       /* Blue walls (placed) */
+  --wall1:#c34a3c;       /* Red walls (placed) */
+
+  /* board lines */
+  --grid: #2a3548;
+  --grid-sub: #39445a;
+
+  /* controls */
+  --btn-bg: #1a2230;
+  --btn-bg-hover: #202a3b;
+  --chip: #1a2230;
+}
+
+/* ---------- Resets ---------- */
+*{ box-sizing:border-box }
+html, body, #root{ height:100% }
+html { color-scheme: dark; }
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial;
+  color: var(--ink);
+  background: var(--bg-accent), var(--bg);
+}
+
+/* ---------- Layout shell ---------- */
+.container{
+  max-width: 1280px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+/* Header */
+.header{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  margin-bottom: 14px;
+}
+.header h2{
+  margin:0;
+  font-weight: 800;
+  letter-spacing:.2px;
+  background: linear-gradient(90deg, #fff 0%, var(--p0) 50%, var(--p1) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 6px 18px rgba(122,162,255,.25));
+}
+.hdr-controls{ display:flex; align-items:center; gap:12px; }
+.mute{ color: var(--muted); font-size: 14px; display:flex; align-items:center; gap:6px; }
+
+/* ---------- Buttons & chips ---------- */
+button{
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: var(--btn-bg);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform .06s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+  box-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+button:hover{ transform: translateY(-1px); background: var(--btn-bg-hover); box-shadow: var(--shadow) }
+button:active{ transform: translateY(0); box-shadow: none }
+button.primary{
+  background: linear-gradient(155deg, var(--accent), #ff91fa);
+  color: white; border-color: transparent;
+}
+button.primary:hover{ box-shadow: 0 14px 28px rgba(108,140,255,.40) }
+.controls{ display:flex; gap:10px; flex-wrap:wrap; }
+
+.badge{
+  padding:6px 10px; border-radius: 999px;
+  background: var(--chip); color: var(--ink);
+  border:1px solid var(--stroke);
+  font-size: 13px;
+}
+
+/* Base variables; tweak colors/heights to taste */
+input[type="range"].split {
+  --h: 11px;                 /* track height */
+  --fill: #7aa2ff;          /* left side (value) */
+  --track: #2a3347;         /* right side (background) */
+  --thumb: #4d82ff;         /* knob color */
+  --p: 50%;                 /* filled percent; set from style attr */
+  appearance: none;
+  width: 140px;
+  height: var(--h);
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--fill) 0%,
+    var(--fill) var(--p),
+    var(--track) var(--p),
+    var(--track) 100%
+  );
+  outline: none;
+}
+
+/* WebKit thumb */
+input[type="range"].split::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--thumb);
+  border: 2px solid #0e1116;
+  box-shadow: 0 0 0 4px rgba(122,162,255,.18);
+  margin-top: calc((var(--h) - 16px)/2); /* center on track */
+  cursor: pointer;
+}
+
+
+/* Firefox track/progress (FF supports split natively) */
+input[type="range"].split::-moz-range-track {
+  height: var(--h); background: var(--track); border-radius: 50%;
+}
+input[type="range"].split::-moz-range-progress {
+  height: var(--h); background: var(--fill); border-radius: 999px;
+}
+input[type="range"].split::-moz-range-thumb {
+  width: 16px; height: 16px; border: none; border-radius: 50%;
+  background: var(--thumb); box-shadow: 0 0 0 4px rgba(122,162,255,.18);
+  cursor: pointer;
+}
+
+/* ---------- Panels ---------- */
+.panel{
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+}
+.panel + .panel{ margin-top: 14px; }
+.panel .controls{ align-items: center; }
+
+/* ---------- Right sidebar layout ---------- */
+.game-layout{
+  display:grid;
+  grid-template-columns: 1fr 340px;
+  gap: 16px;
+}
+.board-pane{
+  background: var(--panel-2);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 10px;
+  overflow:auto;
+}
+.side-pane{
+  position: sticky; top: 10px; align-self: start;
+  display:flex; flex-direction: column; gap: 16px;
+}
+
+/* Legend & dots */
+.legend{ display:flex; gap:14px; margin-top:10px; align-items:center; color: var(--muted); }
+.legend span{ display:inline-flex; align-items:center; gap:8px }
+.circle{ width:12px; height:12px; border-radius:50%; display:inline-block }
+.dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:8px; transform: translateY(1px); }
+.dot.blue{ background: var(--p0) } .dot.red{ background: var(--p1) }
+
+/* ---------- Board (SVG) ---------- */
+.grid-wrap{
+  border-radius: 12px;
+  background: linear-gradient(180deg,#121723 0%,#0f141e 100%);
+  box-shadow: var(--shadow);
+  padding: 8px;
+}
+
+/* If you apply these classes in GridBoard, they’ll style nicely in dark */
+.cell{ transition: fill .2s ease, stroke .2s ease; }
+.cell--highlight{ fill: rgba(110,160,255,.20) !important; }
+.cell--selected{ stroke: var(--accent) !important; stroke-width:2 !important }
+
+/* Subtle grid anchors */
+.grid-wrap .anchor-dot{ fill:#7c8597; opacity:.85 }
+.grid-wrap .anchor-dot--muted{ opacity:.35 }
+
+/* Pawn glow & hover */
+.pawn{ filter: drop-shadow(0 8px 16px rgba(0,0,0,.35)); transition: transform .12s ease; }
+.pawn:hover{ transform: translateY(-1px) }
+
+/* Move dots pulse */
+@keyframes pulse {
+  0% { transform: scale(0.88); opacity:.85 }
+  50% { transform: scale(1); opacity:1 }
+  100% { transform: scale(0.88); opacity:.85 }
+}
+.move-dot{ animation: pulse 1.2s ease-in-out infinite; }
+
+/* Optional: default SVG strokes (if you don’t set inline) */
+.grid-wrap .grid-line{ stroke: var(--grid); }
+.grid-wrap .grid-line--sub{ stroke: var(--grid-sub); }
+
+/* ---------- Overlay (winner) ---------- */
+.overlay{
+  position: fixed; inset:0; display:grid; place-items:center;
+  background: rgba(6,9,14,.72); z-index:20;
+  backdrop-filter: blur(4px);
+}
+.overlay-card{
+  background: linear-gradient(180deg,#141a25,#0f141c);
+  border:1px solid var(--stroke); border-radius:16px;
+  padding:18px 22px; box-shadow: var(--shadow); text-align:center;
+}
+.overlay-card h3{ margin: 0 0 10px; }
+
+/* ---------- Menu block ---------- */
+.menu-block{ margin-top: 8px }
+
+.wall { filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px){
+  .game-layout{ grid-template-columns: 1fr; }
+  .side-pane{ position: static; }
+  .vol{ width: 110px; }
+}
+
+@media (max-width: 560px){
+  .container{ padding: 0 12px; }
+  .panel{ padding: 12px }
+  .vol{ width: 90px; }
+}
+
+/* ---------- Nice-to-haves ---------- */
+::selection{ background: rgba(122,162,255,.25); }
+::-webkit-scrollbar{ width: 12px; height: 12px; }
+::-webkit-scrollbar-thumb{
+  background: #202a3b; border: 3px solid #0e1116; border-radius: 999px;
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; transition: none !important }
+}
