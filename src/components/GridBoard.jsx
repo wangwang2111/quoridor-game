@@ -25,6 +25,10 @@ export default function GridBoard({
   const CAP_R      = Math.round(WALL_THICK * 0.75)             // end-cap radius
   const PREVIEW_DASH = '8 6'
 
+  const isCoarse = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)')?.matches
+  const ANCHOR_HIT = isCoarse ? 28 : 20
+  const ANCHOR_R   = isCoarse ? 8  : 6
+
   // Tiny component that draws a “bone” between (x1,y1) and (x2,y2)
   function WallBone({ x1, y1, x2, y2, color, preview = false }) {
     const dx = x2 - x1, dy = y2 - y1
@@ -169,7 +173,7 @@ export default function GridBoard({
             className={`anchor-dot ${wallMode ? '' : 'anchor-dot--muted'}`}
             cx={x}
             cy={y}
-            r={6}
+            r={ANCHOR_R}
             fill={wallMode ? '#7c8597' : '#7c8597'}
             opacity={wallMode ? 0.95 : 0.35}
           />
@@ -196,10 +200,10 @@ export default function GridBoard({
           )}
           {/* Click target for placing at this anchor */}
           <rect
-            x={x - 10}
-            y={y - 10}
-            width={20}
-            height={20}
+            x={x - ANCHOR_HIT/2}
+            y={y - ANCHOR_HIT/2}
+            width={ANCHOR_HIT}
+            height={ANCHOR_HIT}
             fill="transparent"
             onClick={() => wallMode && onAnchorClick?.(r, c)}
           />
@@ -244,7 +248,8 @@ export default function GridBoard({
 
   return (
     <div className="panel board-pane">
-      <svg className="grid-wrap" width={w} height={h} viewBox={`0 0 ${w} ${h}`}>
+      <svg className="grid-wrap" width={w} height={h} viewBox={`0 0 ${w} ${h}`}
+      style={{ maxWidth: '100%', height: 'auto', touchAction: 'manipulation' }}>
         {cells}
         {walls}
         {anchors}

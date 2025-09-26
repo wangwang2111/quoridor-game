@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import GridBoard from './components/GridBoard.jsx'
 import HUD from './components/HUD.jsx'
 import Menu, { HumanAIChooser, Tutorial } from './components/Menu.jsx'
@@ -107,6 +107,30 @@ export default function App(){
   const aiLabel = (aiAuto[0] || aiAuto[1])
     ? ` — AI: ${aiAuto[0] && aiAuto[1] ? 'Both' : (aiAuto[0] ? 'Blue (P0)' : 'Red (P1)')}`
     : ''
+
+  const [cellSize, setCellSize] = useState(56)
+  const boardShellRef = useRef(null)
+
+  useLayoutEffect(() => {
+    const recalc = () => {
+      const N = gs.N
+
+      // Available width: the board column (when sidebar stacks, it's full width)
+      const shellW = boardShellRef.current?.clientWidth || window.innerWidth
+      // Available height: viewport minus header and some breathing room for panels
+      const availH = Math.max(320, window.innerHeight - 180)
+
+      // Fit by width & height, clamp to practical touch sizes
+      const byW = Math.floor((shellW - 24) / N)
+      const byH = Math.floor((availH - 24) / N)
+      const fit = Math.max(32, Math.min(72, Math.min(byW, byH)))
+
+      setCellSize(fit)
+    }
+    recalc()
+    window.addEventListener('resize', recalc)
+    return () => window.removeEventListener('resize', recalc)
+  }, [gs.N, scene])
 
   // Utility: clear UI selection/highlights
   const resetSelection = () => { setSelectedCell(null); setMoveHighlights([]) }
@@ -318,10 +342,10 @@ export default function App(){
       {scene === 'GAME' && (
         <div className="game-layout">
           {/* LEFT: Board */}
-          <div className="board-pane">
+          <div className="board-pane" ref={boardShellRef}>
             <GridBoard
               gs={gs}
-              cellSize={56}
+              cellSize={cellSize}           /* <— use responsive size */
               onCellClick={onCellClick}
               wallMode={wallMode}
               wallOrient={wallOrient}

@@ -254,3 +254,21 @@ input[type="range"].split::-moz-range-thumb {
 @media (prefers-reduced-motion: reduce){
   *{ animation: none !important; transition: none !important }
 }
+
+/* Board column is allowed to shrink; sidebar stacks under 1100px already */
+.board-pane { overflow: auto; }
+
+/* Make buttons & text larger on small screens */
+@media (max-width: 560px){
+  html { font-size: 17px; }               /* bump global size a bit */
+  .header h2 { font-size: 20px; }
+  .panel { padding: 12px; }
+  button { padding: 12px 14px; font-size: 16px; min-height: 44px; } /* comfortable taps */
+  .legend { font-size: 14px; }
+}
+
+/* Give the grid card a little breathing room edge-to-edge on phones */
+@media (max-width: 420px){
+  .container { padding: 0 10px; }
+  .grid-wrap { padding: 6px; }
+}
