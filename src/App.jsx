@@ -76,7 +76,10 @@ export default function App(){
 
   // Start/stop background music when entering/leaving the game scene
   useEffect(()=>{
-    if (scene === 'GAME') Sound.playBg()
+    if (scene === 'GAME') {
+      Sound.playBg();
+      Sound.unlock();                  // unlock audio on user gesture; start bg loop
+    }
     else Sound.stopBg()
   }, [scene])
 
@@ -197,7 +200,7 @@ export default function App(){
   // Let the AI play one move for the side to move (manual trigger or autoplay)
   const onAIMove = () => {
     const s = cloneFrom(gs)
-    const mv = searchWithTime(s, 3, 600)
+    const mv = searchWithTime(s, 5, 1000)
     if (mv) {
       s.apply(mv)
       setGs(s)
