@@ -11,7 +11,7 @@ export class GameState {
   }
 
   shortestPathNext(me = this.toMove){
-    const { dist, next } = this.board.bfsNextStepToGoal(this.pawns[me], this.goalRows(me))
+    const { dist, next } = this.board.astarNextStepToGoal(this.pawns[me], this.goalRows(me))
     return { dist, next } // next may be null if blocked (shouldn’t happen due to legality checks)
   }
 
@@ -124,8 +124,8 @@ export class GameState {
 
   evaluate(me = this.toMove){
     const you = 1 - me
-    const dMe = this.board.bfsDistToGoal(this.pawns[me], this.goalRows(me))
-    const dYou = this.board.bfsDistToGoal(this.pawns[you], this.goalRows(you))
+    const dMe = this.board.astarDistToGoal(this.pawns[me], this.goalRows(me))
+    const dYou = this.board.astarDistToGoal(this.pawns[you], this.goalRows(you))
     if (dMe==null || dYou==null) return 0
     // good if my path is shorter and I have more walls:
     return (dYou - dMe) * 10 + (this.wallsLeft[me] - this.wallsLeft[you]) * 0.5
