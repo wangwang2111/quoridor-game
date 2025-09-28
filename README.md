@@ -1,25 +1,26 @@
-# Repo: quoridor-web-js
-#
-# ├── README.md
-# ├── package.json
-# ├── vite.config.js
-# ├── index.html
-# └── src/
-#     ├── main.jsx
-#     ├── App.jsx
-#     ├── styles.css
-#     ├── components/
-#     │   ├── GridBoard.jsx
-#     │   └── HUD.jsx
-#     ├── engine/
-#     │   ├── types.js
-#     │   ├── board.js
-#     │   └── gamestate.js
-#     └── ai/
-#         └── search.js
 
 # Quoridor — Web UI (React + JavaScript)
 
+Repo: quoridor-web-js
+├── README.md
+├── package.json
+├── vite.config.js
+├── index.html
+└── src/
+    ├── main.jsx
+    ├── App.jsx
+    ├── styles.css
+    ├── components/
+    │   ├── GridBoard.jsx
+    │   └── HUD.jsx
+    ├── engine/
+    │   ├── types.js
+    │   ├── board.js
+    │   └── gamestate.js
+    └── ai/
+        └── search.js
+
+# Overview
 A fast, client‑only Quoridor with a reusable engine (plain JS), BFS path checks, and a baseline AI (negamax + time cap). No backend required.
 
 ## Quick Start
