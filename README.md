@@ -1,13 +1,7 @@
-Here’s a **production-ready README rewrite** that’s clean, professional, and ready for public or team use — including sections for **build setup, environment variables, Docker deployment**, and **project structure**. It’s still concise and developer-friendly, like a modern open-source project README.
-
----
-
 # 🧩 Quoridor — Web UI (React + Vite)
 
 > A fast, lightweight Quoridor implementation with a reusable JavaScript engine, BFS pathfinding, and a time-capped Negamax AI.
 > 100% client-side — no backend required.
-
----
 
 ## 📁 Repository Structure
 
